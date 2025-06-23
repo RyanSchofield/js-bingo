@@ -1,0 +1,10 @@
+{
+  "name": "code-bingo",
+  "version": "0.0.1",
+  "description": "javascript quiz game",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}

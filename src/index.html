@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> code bingo </title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div id="current-expression"></div>
+	<div id="grid"></div>
+	<div id="control-panel">
+		<div id="buttons">
+			<button id="get-new-expression">next</button>
+			<button id="restart">restart</button>
+		</div>
+		<div id="expressions"></div>
+	</div>
+	<div id="show-controls"></div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		const socket = io();
+		socket.emit('getBoard');
+
+		const grid = document.getElementById('grid');
+		const expressions = document.getElementById('expressions');
+		const expButton = document.getElementById('get-new-expression');
+		const restartButton = document.getElementById('restart');
+		const currentExpression = document.getElementById('current-expression');
+		const controlPanel = document.getElementById('control-panel');
+		const showControls = document.getElementById('show-controls');
+
+		expButton.onclick = () => socket.emit('getExpression');
+		restartButton.onclick = () => socket.emit('newGame');
+		showControls.onclick = () => controlPanel.style.visibility = 'visible';
+
+		socket.on('setBoard', (board) => {
+			grid.replaceChildren()
+			for (let val of board) {
+				const el = document.createElement('div')
+				el.textContent = val
+				el.classList.add('cell')
+				el.onclick = () => {
+					if (el.classList.contains('marked')) {
+						el.classList.remove('marked');
+					} else {
+						el.classList.add('marked');
+					}
+				}
+				grid.appendChild(el)
+			}
+		});
+
+		socket.on('startGame', () => {
+			expressions.replaceChildren();
+			currentExpression.textContent = '';
+			socket.emit('getBoard')
+			console.log('startGame')		
+		})
+
+		socket.on('newExpression', (expression, value) => {
+			console.log('newExpression', expression, value)
+			const el = document.createElement('div')
+			el.classList.add('expression-row')
+			
+			const expDisplay = document.createElement('span')
+			expDisplay.classList.add('expression-display')
+			expDisplay.textContent = expression
+			el.appendChild(expDisplay)
+			const valDisplay = document.createElement('span')
+			valDisplay.classList.add('value-display')
+			valDisplay.textContent = value 
+			el.appendChild(valDisplay)
+			
+			expressions.appendChild(el)
+			currentExpression.textContent = expression
+		});
+	</script>
+</body>
+</html>
