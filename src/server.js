@@ -81,10 +81,6 @@ const initializeGame = () => {
 	io.emit('startGame')
 }
 
-// we want to create a map of values as shown
-// to list of expressions generating them.
-
-
 const getBoard = () => {
 	const shuffledValues = shuffleArray(possibleValues)
 	const newBoard = []
