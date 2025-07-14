@@ -115,4 +115,5 @@ typeof "foo"
 0b11
 typeof 1n
 1e2
+typeof (x => x)
 
