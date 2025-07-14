@@ -60,6 +60,9 @@ const initializeGame = () => {
 	
 	let i = 0;
 	for (let candidate of shuffledCandidates) {
+
+		if (candidate.startsWith('//')) continue;
+
 		if (i > 50) break;
 
 		let value = null;
